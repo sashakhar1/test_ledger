@@ -33,5 +33,4 @@
 # Ignore master key for decrypting credentials and more.
 /config/master.key
 
-# JetBrains IDE settings (per-developer, not per-project).
 /.idea/
