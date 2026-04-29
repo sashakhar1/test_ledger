@@ -1,3 +1,13 @@
+FactoryBot.define do
+  factory :posting do
+    association :journal_entry
+    association :account
+    direction { "debit" }
+    amount_cents { 1000 }
+    currency { "USD" }
+  end
+end
+
 # == Schema Information
 #
 # Table name: postings
@@ -21,12 +31,3 @@
 #  fk_rails_...  (account_id => accounts.id)
 #  fk_rails_...  (journal_entry_id => journal_entries.id)
 #
-FactoryBot.define do
-  factory :posting do
-    association :journal_entry
-    association :account
-    direction { "debit" }
-    amount_cents { 1000 }
-    currency { "USD" }
-  end
-end

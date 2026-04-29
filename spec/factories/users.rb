@@ -1,3 +1,9 @@
+FactoryBot.define do
+  factory :user do
+    sequence(:email) { |n| "user#{n}@example.com" }
+  end
+end
+
 # == Schema Information
 #
 # Table name: users
@@ -11,8 +17,3 @@
 #
 #  index_users_on_email  (email) UNIQUE
 #
-FactoryBot.define do
-  factory :user do
-    sequence(:email) { |n| "user#{n}@example.com" }
-  end
-end

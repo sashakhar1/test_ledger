@@ -1,3 +1,11 @@
+FactoryBot.define do
+  factory :journal_entry do
+    sequence(:idempotency_key) { |n| "ik_#{n}" }
+    memo { "Test entry" }
+    posted_at { Time.current }
+  end
+end
+
 # == Schema Information
 #
 # Table name: journal_entries
@@ -22,10 +30,3 @@
 #
 #  fk_rails_...  (reverses_journal_entry_id => journal_entries.id)
 #
-FactoryBot.define do
-  factory :journal_entry do
-    sequence(:idempotency_key) { |n| "ik_#{n}" }
-    memo { "Test entry" }
-    posted_at { Time.current }
-  end
-end
