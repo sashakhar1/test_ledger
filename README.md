@@ -30,10 +30,6 @@ bundle exec rspec
 
 Три сценария собраны в [`db/seeds.rb`](db/seeds.rb):
 
-1. **Оплата заказа** — `created → paid`, создаётся `JournalEntry` с двумя `Posting` (DR wallet, CR revenue).
-2. **Отмена оплаченного со сторно** — `paid → cancelled`, создаётся новая reversing `JournalEntry` со ссылкой на оригинал и обратными постингами; балансы возвращаются.
-3. **Отмена неоплаченного** — `created → cancelled`, проводки нет, только смена статуса.
-
 ```ruby
 # Сценарий 1: оплата
 sasha_order = Order.create!(user: sasha, amount_cents: 1_500)
