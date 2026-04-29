@@ -20,6 +20,9 @@ class PayOrderService
     wallet  = locate_user_wallet
     revenue = locate_system_revenue
 
+    # Defence in depth: the UNIQUE constraint on JournalEntry#idempotency_key
+    # already blocks double-charging on retries. This lock additionally
+    # serialises balance recalculation under contention.
     wallet.with_lock do
       journal_entry = build_journal_entry(wallet:, revenue:)
       journal_entry.save!
