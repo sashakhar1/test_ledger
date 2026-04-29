@@ -3,6 +3,8 @@ require "rails_helper"
 RSpec.describe "Concurrency" do
   self.use_transactional_tests = false
 
+  # Transactional fixtures are off here so parallel threads can see each other's
+  # committed writes; without them we have to wipe state ourselves between examples.
   def truncate_all_tables
     ActiveRecord::Base.connection.execute(
       "TRUNCATE TABLE postings, orders, journal_entries, accounts, users RESTART IDENTITY CASCADE"
