@@ -26,9 +26,30 @@ bundle exec rspec
 
 `db:setup` создаёт базу, загружает схему и заполняет три демо-сценария.
 
-## Где посмотреть, что и как вызывается
+## Сценарии в коде
 
-Все три сценария вживую вызваны в [`db/seeds.rb`](db/seeds.rb) — самая короткая точка входа. Открой и увидишь как сервисы (`PayOrderService.call(...)`, `CancelOrderService.call(...)`) принимают заказ и что делают с балансом. После `db:setup` файл уже отработал — данные в базе, можно дальше смотреть в `bin/rails console`.
+Три сценария собраны в [`db/seeds.rb`](db/seeds.rb):
+
+1. **Оплата заказа** — `created → paid`, создаётся `JournalEntry` с двумя `Posting` (DR wallet, CR revenue).
+2. **Отмена оплаченного со сторно** — `paid → cancelled`, создаётся новая reversing `JournalEntry` со ссылкой на оригинал и обратными постингами; балансы возвращаются.
+3. **Отмена неоплаченного** — `created → cancelled`, проводки нет, только смена статуса.
+
+```ruby
+# Сценарий 1: оплата
+sasha_order = Order.create!(user: sasha, amount_cents: 1_500)
+PayOrderService.call(order: sasha_order)
+
+# Сценарий 2: оплата + отмена со сторно
+maxim_order = Order.create!(user: maxim, amount_cents: 5_000)
+PayOrderService.call(order: maxim_order)
+CancelOrderService.call(order: maxim_order)
+
+# Сценарий 3: отмена до оплаты
+viktoria_order = Order.create!(user: viktoria, amount_cents: 2_000)
+CancelOrderService.call(order: viktoria_order)
+```
+
+После `db:setup` файл уже отработал, данные в базе — можно посмотреть через `bin/rails console`.
 
 ## Сущности
 
