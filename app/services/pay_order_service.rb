@@ -10,7 +10,10 @@ class PayOrderService
   end
 
   def call
-    return @order.reload if already_paid?
+    if already_paid?
+      @order.reload
+      return @order if @order.status == "paid"
+    end
 
     unless @order.status == "created"
       raise Order::InvalidStateTransition,

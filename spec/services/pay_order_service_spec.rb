@@ -73,6 +73,15 @@ RSpec.describe PayOrderService do
       expect { PayOrderService.call(order: order) }
         .to raise_error(Order::InvalidStateTransition)
     end
+
+    it "raises when paying an order that was paid then cancelled (storno cycle)" do
+      order = create(:order, user: user, amount_cents: 1000)
+      PayOrderService.call(order: order)
+      CancelOrderService.call(order: order)
+
+      expect { PayOrderService.call(order: order) }
+        .to raise_error(Order::InvalidStateTransition)
+    end
   end
 
   describe "missing accounts" do
